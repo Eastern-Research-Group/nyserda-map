@@ -14,7 +14,6 @@ class JsonOutput:
     def generate(self):
         for instance in self.app.session.query(MapFeature).filter_by(key=self.key).order_by(MapFeature.id):
             # copy image to output with unique name
-            print(instance.path)
             filename = "%s_%s.png" % (instance.id, instance.key)
             output_path = os.path.join(self.output_base,filename)
             try:

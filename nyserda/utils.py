@@ -11,7 +11,7 @@ def create_dir(dir_name):
 
 def create_temp_dir(folder):
     temp_dir = '.tmp' + str(int(time()))
-    full_path = folder + '/' + temp_dir
+    full_path = os.path.join(folder,temp_dir)
     create_dir(full_path)
 
     return full_path

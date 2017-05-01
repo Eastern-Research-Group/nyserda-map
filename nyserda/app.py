@@ -6,9 +6,9 @@ from nyserda.db import Session
 class App:
     def __init__(self):
         self.ROOT_PATH = os.getcwd()
-        self.BIN_PATH = self.ROOT_PATH + '/bin'
-        self.OUTPUT_PATH = self.BIN_PATH + '/output'
-        self.INPUT_PATH = self.BIN_PATH + '/input'
+        self.BIN_PATH = os.path.join(self.ROOT_PATH,'bin')
+        self.OUTPUT_PATH = os.path.join(self.BIN_PATH,'output')
+        self.INPUT_PATH = os.path.join(self.BIN_PATH,'input')
         self.TEMP_PATH = ''
         self.session = Session()
 
