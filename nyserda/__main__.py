@@ -8,3 +8,5 @@ sys.path.insert(0, path)
 import nyserda
 
 nyserda.run()
+# nyserda.db()
+# nyserda.clean()
