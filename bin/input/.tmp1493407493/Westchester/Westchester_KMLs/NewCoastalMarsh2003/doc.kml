@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+<Document>
+<Style>
+<ListStyle id="hideChildren">
+<listItemType>checkHideChildren</listItemType>
+</ListStyle>
+</Style>
+<name>NewCoastalMarsh2003</name>
+<NetworkLink>
+<name>0/0/0</name>
+<Region>
+<Lod>
+<minLodPixels>-1</minLodPixels>
+<maxLodPixels>-1</maxLodPixels>
+</Lod>
+<LatLonAltBox><west>-73.84310702199058</west>
+<north>41.02779173850515</north>
+<east>-73.40660399948858</east>
+<south>40.59128871600315</south>
+</LatLonAltBox>
+</Region>
+<Link>
+<href>0/0/0.kml</href>
+<viewRefreshMode>onRegion</viewRefreshMode>
+</Link>
+</NetworkLink>
+<LookAt>
+<longitude>-73.72036718894208</longitude>
+<latitude>40.94426897388456</latitude>
+<altitude>0</altitude>
+<range>24007.49398435803600</range>
+<tilt>0</tilt>
+<heading>0</heading>
+</LookAt>
+</Document>
+</kml>
