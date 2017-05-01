@@ -1,4 +1,3 @@
-nyserda
 GDAL==1.11.5
 lxml==3.7.3
 nyserda==0.1
