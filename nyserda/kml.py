@@ -55,6 +55,28 @@ class Kml:
         ns = ".//{http://www.opengis.net/kml/2.2}"
         return haystack.find(ns + needle)
 
+    def get_href(self,root):
+        folders = self.find(root,'Folder')
+        ground_overlay = self.find(folders,'GroundOverlay')
+        icon = self.find(ground_overlay,'Icon')
+        href = self.find(icon,'href')
+
+        return href.text
+
+    def get_coords(self,root):
+        folders = self.find(root,'Folder')
+        ground_overlay = self.find(folders,'GroundOverlay')
+        latLonBox = self.find(ground_overlay,'LatLonBox')
+        west = self.find(latLonBox,'west')
+        north = self.find(latLonBox,'north')
+        east = self.find(latLonBox,'east')
+        south = self.find(latLonBox,'south')
+        coords = (
+            west.text,
+            north.text,
+            east.text,
+            south.text,
+        )
     def parse_kml(self,file,path):
         # xml = self.get_root(file)
         obj = self.xml_to_obj(file)
@@ -69,26 +91,11 @@ class Kml:
             ns = ".//{http://www.opengis.net/kml/2.2}"
             tree = etree.parse(path)
             root = tree.getroot()
-            folders = self.find(root,'Folder')
-            ground_overlay = self.find(folders,'GroundOverlay')
-            icon = self.find(ground_overlay,'Icon')
-            href = self.find(icon,'href')
-            latLonBox = self.find(ground_overlay,'LatLonBox')
-            west = self.find(latLonBox,'west')
-            north = self.find(latLonBox,'north')
-            east = self.find(latLonBox,'east')
-            south = self.find(latLonBox,'south')
-            coords = (
-                west.text,
-                north.text,
-                east.text,
-                south.text,
-            )
-
+            
             data = {
                 'path': path,
-                'link': href.text,
-                'coords': coords
+                'link': self.get_href(root),
+                'coords': self.get_coords(root),
             }
 
         data['path'] = path
