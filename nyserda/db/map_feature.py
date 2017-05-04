@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from .main import Base
 
+
 class MapFeature(Base):
     __tablename__ = 'map_feature'
     id = Column(Integer, primary_key=True)
