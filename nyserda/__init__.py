@@ -19,6 +19,7 @@ def run():
         kmls = kmz.extract_all(kmz_files)
         data = []
         for foldername in kmls:
+            # TODO: Create sub-folders for each of the layers (e.g., ExistingMarsh2100) with their own GeoJSON
             print('Extracting data for',foldername)
             kml = Kml(app,foldername, foldername)
             data.append((foldername, kml.extract())) # Deprec
