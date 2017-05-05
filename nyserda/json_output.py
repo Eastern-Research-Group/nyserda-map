@@ -32,16 +32,18 @@ class JsonOutput:
                 # Get all the png from that directory and move over?
                 if(ext == '.png'):
                     copyfile(instance.image, output_path)
-                    
+
                     # Write coordinates into json with new path name (s,w,n,e)
                     # TODO: Create new feature bundle for each layer
                     coords = instance.coords.split(',')
+                    print(os.path.join('/',instance.key,instance.subfolder,filename))
                     self.features.append({
                         'type': 'Feature',
                         'properties': {
                             'group': group,
                             'name': '%s_%s' % (instance.id, instance.key),
-                            'image_overlay': output_path # TODO: Make this relative to json
+                            # 'image_overlay': output_path # TODO: Make this relative to json
+                            'image_overlay': os.path.join('/',instance.key,instance.subfolder,filename)
                         },
                         'geometery': {
                             'type': 'Point',

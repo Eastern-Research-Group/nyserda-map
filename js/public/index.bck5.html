@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tag above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <style>
+        #mapid {
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Leaflet example</h2>
+
+<div id="mapid"></div>
+
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+<script src='leaflet.filelayer.js'></script>
+<script>
+    //    var london = [51.505, -0.09];
+    var nyc = [40.6028, -73.8559];
+
+    var rasters = [
+        { path: '/NewYorkCity/NYC_KMLs/ExistingMarsh2100/0/0/0.png', bounds: [[40.06171851780376, -74.26215080772646], [40.92056832478176, -73.40330100074846]] },
+        { path: '/NewYorkCity/NYC_KMLs/ExistingMarsh2100/1/0/0.png', bounds: [[40.49114342129277, -74.26215080772646], [40.92056832478176, -73.83272590423746]] },
+        { path: '/NewYorkCity/NYC_KMLs/ExistingMarsh2100/1/1/0.png', bounds: [[40.49114342129277, -73.83272590423746], [40.92056832478176, -73.40330100074846]] }
+    ];
+
+    var zoomedIn = L.layerGroup(rasters.map(function (raster) {
+        return L.imageOverlay(raster.path, raster.bounds);
+    }));
+
+    var zoom = 10;
+
+    var map = L.map('mapid', {
+        center: nyc,
+        zoom: zoom
+    }).setView(nyc, zoom);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'bryanneva.oclj42hm',
+        accessToken: 'pk.eyJ1IjoiYnJ5YW5uZXZhIiwiYSI6ImNpaHo4anBwaTA0NGJ0Z20xNWFzc2p0a2wifQ.YrgNYNaTMTiK7NkHD8z0yQ'
+    }).addTo(map);
+
+    map.addLayer(zoomedIn);
+    map.on("zoomstart", function() {
+        var zoomLevel = map.getZoom();
+        console.log('zoomstart',zoomLevel,zoomedIn);
+        if(zoomLevel > 9) {
+            map.addLayer(zoomedIn);
+        } else {
+            map.removeLayer(zoomedIn)
+        }
+    });
+
+</script>
+</body>
+</html>
