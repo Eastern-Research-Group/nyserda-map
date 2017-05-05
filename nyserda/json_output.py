@@ -2,7 +2,7 @@ import os
 import json
 from shutil import copyfile
 from nyserda.db import MapFeature
-
+from .utils import create_dir
 
 class JsonOutput:
     def __init__(self, app, key, output_base):
@@ -15,26 +15,43 @@ class JsonOutput:
     def generate(self):
         for instance in self.app.session.query(MapFeature).filter_by(key=self.key).order_by(MapFeature.id):
             # copy image to output with unique name
-            filename = "%s_%s.png" % (instance.id, instance.key)
-            output_path = os.path.join(self.output_base, filename)
-            try:
-                copyfile(instance.path, output_path)
-            except OSError:
-                pass
+            image_name = instance.image.split('/')[-1]
+            name,ext = os.path.splitext(image_name)
+            filename = "%s_%s%s" % (instance.id, instance.key, ext)
+            folder_path = self.output_base
 
-            # Write coordinates into json with new path name (s,w,n,e)
-            coords = instance.coords.split(',')
-            self.features.append({
-                'type': 'Feature',
-                'properties': {
-                    'name': '%s_%s' % (instance.id, instance.key),
-                    'image_overlay': filename
-                },
-                'geometery': {
-                    'type': 'Point',
-                    'coordinates': [[coords[0], coords[1]], [coords[2], coords[3]]],
-                }
-            })
+            group = False
+            if(instance.subfolder and instance.subfolder is not '0'):
+                folder_path = os.path.join(self.output_base,instance.subfolder)
+                group = instance.subfolder
+                create_dir(folder_path)
+
+            output_path = os.path.join(folder_path, filename)
+
+            try:
+                # Get all the png from that directory and move over?
+                if(ext == '.png'):
+                    copyfile(instance.image, output_path)
+                    
+                    # Write coordinates into json with new path name (s,w,n,e)
+                    # TODO: Create new feature bundle for each layer
+                    coords = instance.coords.split(',')
+                    self.features.append({
+                        'type': 'Feature',
+                        'properties': {
+                            'group': group,
+                            'name': '%s_%s' % (instance.id, instance.key),
+                            'image_overlay': output_path # TODO: Make this relative to json
+                        },
+                        'geometery': {
+                            'type': 'Point',
+                            'coordinates': [[coords[0], coords[1]], [coords[2], coords[3]]],
+                        }
+                    })
+            except OSError as err:
+                print(str(err))
+                print('\n')
+
 
     # Create json / GeoJSON file
     def toJSON(self):

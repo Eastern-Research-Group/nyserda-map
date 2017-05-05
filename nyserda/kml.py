@@ -2,7 +2,7 @@ import os
 import untangle
 from xml.etree import ElementTree
 from lxml import etree
-from nyserda.db import MapFeature
+from nyserda.db import MapFeature, ImageOverlay
 from .utils import obj_json
 
 
@@ -12,6 +12,12 @@ class Kml:
         self.foldername = foldername
         self.path = os.path.join(self.app.TEMP_PATH, self.foldername)
         self.key = key
+        self.subfolder = False
+        try:
+            exploded_path = foldername.split('/')
+            self.subfolder = exploded_path[2]
+        except LookupError as err:
+            pass
 
     def get_contents(self):
         return os.listdir(self.path)
@@ -74,35 +80,62 @@ class Kml:
             ns = ".//{http://www.opengis.net/kml/2.2}"
             tree = etree.parse(path)
             root = tree.getroot()
+            icon_href = self.get_href(root)
+            file_only = icon_href.split('/')[-1]
+            filename, ext = os.path.splitext(file_only)
+            # icon_path = os.path.join(self.foldername,file_only)
+            icon_path = os.path.abspath(icon_href)
+            # print(icon_path,filename, ext)
+            # filesize = os.path.getsize(icon_path)
+            # print(filesize)
+            coordinates = self.get_coords(root)
             data = {
                 'path': path,
-                'link': self.get_href(root),
-                'coords': self.get_coords(root),
+                # 'link': icon_href,
+                'link': icon_path,
+                'coords': coordinates,
             }
         data['path'] = path
         coords = ','.join(data['coords'])
-        feature = MapFeature(
-            path=data['path'], image=data['link'], coords=coords, key=self.key)
+        feature = MapFeature(path=data['path'],
+                             image=data['link'],
+                             coords=coords,
+                             key=self.key,
+                             subfolder=self.subfolder)
         self.app.session.add(feature)
         return data
 
     def handle_file_extract(self, file, path):
+        # doc.kml files
         if not os.path.isfile(file) and file.endswith('.kml'):
             obj = self.xml_to_obj(path)
             data = self.build_data(obj.NetworkLink)
             data['path'] = path
             coords = ','.join(data['coords'])
-            feature = MapFeature(
-                path=data['path'], image=data['link'], coords=coords, key=self.key)
+            feature = MapFeature(path=data['path'],
+                                 image=data['link'],
+                                 coords=coords,
+                                 key=self.key,
+                                 subfolder=self.subfolder)
             self.app.session.add(feature)
             return data
+        # Normal KML files
         elif os.path.isfile(file) and file.endswith('.kml'):
             data = self.parse_kml(file, path)
             return data
+        # Folder
         elif not os.path.isfile(file):
             foldername = os.path.join(self.foldername, file)
             kml = Kml(self.app, foldername, self.key)
             return kml.extract()
+        # PNG
+        else:
+            pass
+            # filename, file_extension = os.path.splitext(file)
+            # overlay = ImageOverlay(path=path,
+            #                        filename=filename,
+            #                        ext=file_extension)
+            # self.app.session.add(overlay)
 
     def extract(self):
         os.chdir(self.path)
