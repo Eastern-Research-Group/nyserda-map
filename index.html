@@ -140,11 +140,13 @@
       westchester: '/Westchester/Westchester.json',
     };
     app.zoom = {
+      default: 10,
       nassau: 11,
       nyc: 11,
       westchester: 13,
     };
     app.center = {
+      default: [40.7993, -73.6853],
       nassau: [40.7202, -73.6208],
       nyc: [40.6983, -73.9490],
       westchester: [40.9314, -73.7394],
@@ -260,10 +262,14 @@
       fetch(url)
         .then(response => response.json())
         .then(json => json.features.map(data => ({
-          path: data.properties.image_overlay,
+          path: '.' + data.properties.image_overlay,
           bounds: data.geometery.coordinates,
           group: data.properties.group,
         })))
+        .then(json => {
+          console.log('json',json);
+          return json;
+        })
         .then(rasters => {
 
           let groups = app.groups[dataSet];
@@ -300,7 +306,7 @@
         });
     }
 
-    initializeMap('nassau');
+    initializeMap('default');
     // populateMap('nassau');
   </script>
 </body>
