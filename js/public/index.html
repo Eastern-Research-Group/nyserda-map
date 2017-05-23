@@ -17,15 +17,98 @@
   <title>React App</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .nyserda-options {
+      position: absolute;
+      left: 12px;
+      top: 7rem;
+      padding: 1rem;
+      z-index: 9999999;
+      background-color: white;
+      border: 1px solid black;
+      box-shadow: 5px 5px 2.5px #888888;
+    }
+
+    .nyserda-data-selector {
+      margin: 1rem 0;
+    }
+
+    .nyserda-data-selector select {
+      width: 100%;
+      height: 2rem;
+      font-size: 1.2rem;
+    }
+
+    .nyserda-layer-selector {
+      margin: 1rem 0;
+    }
+
+    .nyserda-layer-checkbox {
+      display: block;
+      padding: .25rem 0;
+    }
+
+    .nyserda-legend {
+      position: absolute;
+      right: 16px;
+      top: 7rem;
+      z-index: 9999999;
+      border: 1px solid black;
+      box-shadow: 5px 5px 2.5px #888888;
+    }
+
+    .nyserda-lat-lng {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: .5rem;
+      z-index: 9999999;
+      background-color: white;
+    }
+
+    .nyserda-lat-lng-container {
+      display: inline-block;
+      padding: .25rem;
+    }
+
     #mapid {
-      height: 800px;
+      min-height: 800px;
+      height: 100vh;
+      width: 100%;
+      margin: 0;
+      padding: 0;
     }
   </style>
 </head>
 
 <body>
+  <div class="nyserda-options">
+    <div class="nyserda-data-selector">
+      <select name="data-selector" id="data-selector">
+        <option value="" hidden>Select an area</option>
+        <option value="nassau">Nassau</option>
+        <option value="nyc">New York City</option>
+        <option value="westchester">Westchester</option>
+      </select>
+    </div>
 
-  <h2>Leaflet example</h2>
+    <div class="nyserda-layer-selector" id="nyserda-layers-container"></div>
+  </div>
+
+  <div class="nyserda-legend">
+    <img src="./Probability.PNG" alt="legend">
+  </div>
+
+  <div class="nyserda-lat-lng">
+    <div class="nyserda-lat-lng-container"><label for="nyserda-lat">Lat:</label><span id="nyserda-lat"></span></div>
+    <div class="nyserda-lat-lng-container"><label for="nyserda-lng">Lng:</label><span id="nyserda-lng"></span></div>
+    <div class="nyserda-lat-lng-container"><label for="nyserda-zoom">Zoom:</label><span id="nyserda-zoom"></span></div>
+  </div>
 
   <div id="mapid"></div>
 
@@ -34,42 +117,178 @@
   <script src='leaflet.filelayer.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
   <script>
+    const app = {};
+    app.map = false;
+    app.currentSelection = false;
+    app.selectorEle = document.getElementById('data-selector');
+    app.layerListEle = document.getElementById('nyserda-layers-container');
+    app.checkboxes = false;
+    app.data = {
+      nassau: './Nassau/Nassau.json',
+      nyc: './NewYorkCity/NewYorkCity.json',
+      westchester: './Westchester/Westchester.json',
+    };
+    app.zoom = {
+      nassau: 11,
+      nyc: 11,
+      westchester: 13,
+    };
+    app.center = {
+      nassau: [40.7202, -73.6208],
+      nyc: [40.6983, -73.9490],
+      westchester: [40.9314, -73.7394],
+    };
+    app.layers = {
+      nassau: false,
+      nyc: false,
+      westchester: false,
+    };
+    app.sublayers = {
+      nassau: false,
+      nyc: false,
+      westchester: false,
+    };
+    app.organizedRasters = {
+      nassau: false,
+      nyc: false,
+      westchester: false,
+    }
+    app.groups = {
+      nassau: [],
+      nyc: [],
+      westchester: [],
+    };
 
-    // fetch('./Nassau/Nassau.json')
-    // fetch('./NewYorkCity/NewYorkCity.json')
-    fetch('./Westchester/Westchester.json')
-      .then(response => response.json())
-      .then(json => json.features.map(data => ({ path: data.properties.image_overlay, bounds: data.geometery.coordinates })))
-      .then(rasters => {
-        const nyc = [40.6028, -73.8559];
-        var zoomedIn = L.layerGroup(rasters.map(function (raster) {
-            return L.imageOverlay(raster.path, raster.bounds);
-        }));
+    app.selectorEle.addEventListener('change', function(e) {
+      setViewPort(e.target.value);
+      populateMap(e.target.value)
+    });
 
-        var zoom = 10;
+    function setViewPort(dataSet) {
+      if (app.currentSelection) {
+        Object.keys(app.sublayers[app.currentSelection]).forEach(key => app.map.removeLayer(app.sublayers[app.currentSelection][key]));
+      }
 
-        var map = L.map('mapid', {
-            center: nyc,
-            zoom: zoom
-        }).setView(nyc, zoom);
-        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 18,
-            id: 'bryanneva.oclj42hm',
-            accessToken: 'pk.eyJ1IjoiYnJ5YW5uZXZhIiwiYSI6ImNpaHo4anBwaTA0NGJ0Z20xNWFzc2p0a2wifQ.YrgNYNaTMTiK7NkHD8z0yQ'
-        }).addTo(map);
+      app.currentSelection = dataSet;
+      app.map.setView(app.center[dataSet], app.zoom[dataSet])
+    }
 
-        map.addLayer(zoomedIn);
-        map.on("zoomstart", function() {
-            var zoomLevel = map.getZoom();
-            console.log('zoomstart',zoomLevel,zoomedIn);
-            if(zoomLevel > 9) {
-                map.addLayer(zoomedIn);
-            } else {
-                map.removeLayer(zoomedIn)
-            }
+    function bindCheckboxEvents(cb) {
+      app.checkboxes = document.getElementsByClassName('nyserda-layer-checkbox');
+      for (var i = 0; i < app.checkboxes.length; i++) {
+        app.checkboxes[i].addEventListener('change', cb);
+      }
+    }
+
+    function onChangeLayer(e) {
+      const layer = app.sublayers[app.currentSelection][e.target.id];
+
+      if (e.target.checked) {
+        app.map.addLayer(layer);
+      } else {
+        app.map.removeLayer(layer)
+      }
+
+      // app.map.on("zoomstart", function() {
+      //   var zoomLevel = app.map.getZoom();
+      //   // console.log('zoomstart', zoomLevel, layer);
+      //   if (zoomLevel > 9) {
+      //     app.map.addLayer(layer);
+      //   } else {
+      //     app.map.removeLayer(layer)
+      //   }
+      // });
+    }
+
+    function initializeMap(dataSet) {
+      app.map = L.map('mapid', {
+        center: app.center[dataSet],
+        zoom: app.zoom[dataSet]
+      }).setView(app.center[dataSet], app.zoom[dataSet]);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+        maxZoom: 18,
+        id: 'bryanneva.oclj42hm',
+        accessToken: 'pk.eyJ1IjoiYnJ5YW5uZXZhIiwiYSI6ImNpaHo4anBwaTA0NGJ0Z20xNWFzc2p0a2wifQ.YrgNYNaTMTiK7NkHD8z0yQ'
+      }).addTo(app.map);
+
+      app.map.on("click", function() {
+        const zoom = app.map.getZoom();
+        const center = app.map.getCenter();
+        document.getElementById('nyserda-lat').textContent = center.lat;
+        document.getElementById('nyserda-lng').textContent = center.lng;
+        document.getElementById('nyserda-zoom').textContent = zoom;
+      });
+    }
+
+    function populateLayerList(dataSet) {
+      const layers = app.groups[dataSet];
+      let html = layers
+        .map(layer => ({
+          slug: layer,
+          text: layer.replace(/([A-Z])/g, " $1").replace(/(^.+)(\w\d+\w)(.+$)/g, "$1 $2$3"),
+        }))
+        .map(layer => {
+          let ele = "<label for='" + layer.slug + "' class='nyserda-layer-checkbox'>";
+          ele += "<input type='checkbox' id='" + layer.slug + "'>";
+          ele += layer.text + "</label>";
+
+          return ele;
+        })
+        .join('');
+
+      app.layerListEle.innerHTML = html;
+
+      bindCheckboxEvents(onChangeLayer);
+    }
+
+    function populateMap(dataSet) {
+      fetch(app.data[dataSet])
+        .then(response => response.json())
+        .then(json => json.features.map(data => ({
+          path: data.properties.image_overlay,
+          bounds: data.geometery.coordinates,
+          group: data.properties.group,
+        })))
+        .then(rasters => {
+
+          let groups = app.groups[dataSet];
+          if (groups.length === 0) {
+            app.groups[dataSet] = rasters.map(r => r.group).filter((r, index, array) => array.indexOf(r) === index);
+          }
+
+          app.organizedRasters[dataSet] = {};
+          app.groups[dataSet].forEach(group => app.organizedRasters[dataSet][group] = []);
+          rasters.forEach(raster => app.organizedRasters[dataSet][raster.group].push(raster));
+
+          app.sublayers[dataSet] = {};
+          let firstExisting = false;
+          let firstCoastal = false;
+          app.groups[dataSet].forEach((group, index) => {
+            firstExisting = index === 0 ? group : firstExisting;
+            firstCoastal = group.indexOf('NewCoastalMarsh') === 0 && firstCoastal === false ? group : firstCoastal;
+
+            app.sublayers[dataSet][group] = L.layerGroup(app.organizedRasters[dataSet][group].map(raster => L.imageOverlay(raster.path, raster.bounds)));
+          });
+
+
+        //   app.map.addLayer(app.sublayers[dataSet][firstExisting]);
+        //   app.map.addLayer(app.sublayers[dataSet][firstCoastal]);
+          app.map.addLayer(app.sublayers[dataSet].ExistingMarsh2100);
+          app.map.addLayer(app.sublayers[dataSet].NewCoastalMarsh2100);
+
+          populateLayerList(dataSet);
+
+        //   document.getElementById(firstExisting).checked = true;
+        //   document.getElementById(firstCoastal).checked = true;
+          document.getElementById('ExistingMarsh2100').checked = true;
+          document.getElementById('NewCoastalMarsh2100').checked = true;
         });
-      })
+    }
+
+    initializeMap('nassau');
+    // populateMap('nassau');
   </script>
 </body>
 
