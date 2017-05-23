@@ -123,10 +123,11 @@
     app.selectorEle = document.getElementById('data-selector');
     app.layerListEle = document.getElementById('nyserda-layers-container');
     app.checkboxes = false;
+    app.baseUrl = 'https://bryanneva-erg.github.io/nyserda-map/';
     app.data = {
-      nassau: './Nassau/Nassau.json',
-      nyc: './NewYorkCity/NewYorkCity.json',
-      westchester: './Westchester/Westchester.json',
+      nassau: '/Nassau/Nassau.json',
+      nyc: '/NewYorkCity/NewYorkCity.json',
+      westchester: '/Westchester/Westchester.json',
     };
     app.zoom = {
       nassau: 11,
@@ -244,7 +245,7 @@
     }
 
     function populateMap(dataSet) {
-      fetch(app.data[dataSet])
+      fetch(app.baseUrl + app.data[dataSet])
         .then(response => response.json())
         .then(json => json.features.map(data => ({
           path: data.properties.image_overlay,
