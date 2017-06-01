@@ -1,0 +1,8 @@
+.nyserda-legend {
+    position: absolute;
+    right: 16px;
+    top: 7rem;
+    z-index: 9999999;
+    border: 1px solid black;
+    box-shadow: 5px 5px 2.5px #888888;
+}

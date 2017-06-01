@@ -1,0 +1,13 @@
+.nyserda-debug {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: .5rem;
+    z-index: 400;
+    background-color: white;
+}
+
+.nyserda-debug-element {
+    display: inline-block;
+    padding: .25rem;
+}
