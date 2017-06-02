@@ -24,7 +24,7 @@ export default props => {
                 </select>
             </div>
 
-            <div className={`nyserda-slider${props.years.length === 0 ? ' nyserda-hidden' : ''}`}>
+            <div className={`nyserda-slider`}>
                 <Slider
                     min={props.years[0]}
                     max={props.years[props.years.length - 1]}
@@ -32,6 +32,12 @@ export default props => {
                     onChange={props.onChangeSlider}
                     labels={labels}
                     orientation="horizontal"/>
+                {props.years.length !== 0 ? (
+                    <span className="nyserda-slider-caption">
+                        Year
+                    </span>
+                ) : null}
+
             </div>
 
             {props.years.length !== 0 ? (
@@ -42,9 +48,11 @@ export default props => {
                                 type="checkbox"
                                 id="existing-marsh"
                                 value={layerTypes.EXISTING_MARSH}
-                                checked={props.selectedLayerTypes.indexOf(layerTypes.EXISTING_MARSH) !== -1}
+                                checked={props.selectedLayerTypes.indexOf(layerTypes.EXISTING_MARSH) !== - 1}
                                 onChange={props.onSelectLayerType}/>
-                            Existing Marsh
+                            <div className="nyserda-checkbox-text">
+                                Marshland that existed in 2008
+                            </div>
                         </label>
                     </fieldset>
 
@@ -54,9 +62,11 @@ export default props => {
                                 type="checkbox"
                                 id="new-coastal-marsh"
                                 value={layerTypes.NEW_COASTAL_MARSH}
-                                checked={props.selectedLayerTypes.indexOf(layerTypes.NEW_COASTAL_MARSH) !== -1}
+                                checked={props.selectedLayerTypes.indexOf(layerTypes.NEW_COASTAL_MARSH) !== - 1}
                                 onChange={props.onSelectLayerType}/>
-                            New Coastal Marsh
+                            <div className="nyserda-checkbox-text">
+                                Marshland that could emerge due to sea-level rise
+                            </div>
                         </label>
                     </fieldset>
                 </div>
@@ -64,22 +74,22 @@ export default props => {
 
 
             {/*<div className="nyserda-layer-selector" id="nyserda-layers-container">*/}
-                {/*{props.categories.map((category, key) => (*/}
-                    {/*<label*/}
-                        {/*key={key}*/}
-                        {/*htmlFor={`category-${key}`}*/}
-                        {/*className='nyserda-layer-checkbox'>*/}
-                        {/*<input*/}
-                            {/*type="checkbox"*/}
-                            {/*id={`category-${key}`}*/}
-                            {/*value={category}*/}
-                            {/*checked={props.selectedCategories.indexOf(category) !== - 1}*/}
-                            {/*onChange={props.onSelectCategory}/>*/}
+            {/*{props.categories.map((category, key) => (*/}
+            {/*<label*/}
+            {/*key={key}*/}
+            {/*htmlFor={`category-${key}`}*/}
+            {/*className='nyserda-layer-checkbox'>*/}
+            {/*<input*/}
+            {/*type="checkbox"*/}
+            {/*id={`category-${key}`}*/}
+            {/*value={category}*/}
+            {/*checked={props.selectedCategories.indexOf(category) !== - 1}*/}
+            {/*onChange={props.onSelectCategory}/>*/}
 
-                        {/*{category}*/}
+            {/*{category}*/}
 
-                    {/*</label>*/}
-                {/*))}*/}
+            {/*</label>*/}
+            {/*))}*/}
             {/*</div>*/}
         </div>
     );

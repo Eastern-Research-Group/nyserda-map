@@ -3,6 +3,86 @@
     right: 16px;
     top: 7rem;
     z-index: 9999999;
+
+    background-color: white;
     border: 1px solid black;
     box-shadow: 5px 5px 2.5px #888888;
 }
+
+.nyserda-legend-header {
+    width: 10rem;
+    margin: .25rem;
+    text-align: center;
+    font-weight:bold;
+}
+
+.nyserda-probability {
+    list-style-type: none;
+    margin: 0;
+    margin-left: 3rem;
+    padding: 0;
+}
+
+.nyserda-probability li {
+    margin: 0;
+    padding: 0;
+}
+
+.nyserda-color-box {
+    display: inline-block;
+    width: 2rem;
+    height: 1rem;
+    margin: .25rem;
+    border: 1px solid black;
+    vertical-align: middle;
+}
+
+.nyserda-color-0 {
+    background-color: #ffffff;
+}
+
+.nyserda-color-10 {
+    background-color: #1700e8;
+}
+
+.nyserda-color-20 {
+    background-color: #2e00d1;
+}
+
+.nyserda-color-30 {
+    background-color: #4500ba;
+}
+
+.nyserda-color-40 {
+    background-color: #5c00a3;
+}
+
+.nyserda-color-50 {
+    background-color: #73008c;
+}
+
+.nyserda-color-60 {
+    background-color: #8a0075;
+}
+
+.nyserda-color-70 {
+    background-color: #a1005e;
+}
+
+.nyserda-color-80 {
+    background-color: #b80047;
+}
+
+.nyserda-color-90 {
+    background-color: #cf0030;
+}
+
+.nyserda-color-100 {
+    background-color: #e60019;
+}
+
+/*.nyserda-probability li::before {*/
+/**/
+/*}*/
+
+/*.nyserda-probability-0*/
