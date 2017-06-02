@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@mapbox/corslite@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@mapbox/corslite/-/corslite-0.0.7.tgz#29f5b6a188ba946e514bdf0b6401ed4fbe13a39e"
+
 "@timer/detect-port@1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@timer/detect-port/-/detect-port-1.1.3.tgz#1383abd67f9a5d683df5276f8a92d60bdf9abb90"
@@ -1452,6 +1456,10 @@ console-browserify@^1.1.0:
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
+
+console-polyfill@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/console-polyfill/-/console-polyfill-0.2.3.tgz#d455d3d574dbcdccf80e1631df21a486fe05f989"
 
 constants-browserify@^1.0.0:
   version "1.0.0"
@@ -3697,13 +3705,26 @@ leaflet-filelayer@^0.6.0:
     leaflet "^0.7.7"
     togeojson "^0.14.0"
 
+leaflet-geocoder-mapzen@^1.9.2:
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/leaflet-geocoder-mapzen/-/leaflet-geocoder-mapzen-1.9.2.tgz#b2411a4ad49c9332c8241d1e02e8c57974427646"
+  dependencies:
+    "@mapbox/corslite" "0.0.7"
+    console-polyfill "0.2.3"
+
+leaflet-search@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/leaflet-search/-/leaflet-search-2.7.2.tgz#21499b51cf08aab72bae3923b321e71a379c5215"
+  dependencies:
+    leaflet "*"
+
+leaflet@*, leaflet@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.0.3.tgz#1f401b98b45c8192134c6c8d69686253805007c8"
+
 leaflet@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-0.7.7.tgz#1e352ba54e63d076451fa363c900890cb2cf75ee"
-
-leaflet@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.0.3.tgz#1f401b98b45c8192134c6c8d69686253805007c8"
 
 leven@^2.1.0:
   version "2.1.0"

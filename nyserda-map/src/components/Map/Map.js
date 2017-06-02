@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-    Map,
-    TileLayer,
-    ImageOverlay,
-} from 'react-leaflet';
+import {Map, TileLayer, ImageOverlay} from 'react-leaflet';
 import {layerTypes} from '../../redux/modules/control';
+import SearchControl from '../SearchControl';
 import './Map.css';
 
 
 export default props => {
 
     let layers = [];
-    if(props.activeLayers.length !== 0) {
+    if (props.activeLayers.length !== 0) {
         const layerPrefix = {
             [layerTypes.EXISTING_MARSH]: 'ExistingMarsh',
             [layerTypes.NEW_COASTAL_MARSH]: 'NewCoastalMarsh',
@@ -34,6 +31,7 @@ export default props => {
                         url={sublayer.path}/>
                 )))}
 
+                <SearchControl/>
             </Map>
         </div>
     );

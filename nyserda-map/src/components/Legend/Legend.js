@@ -1,5 +1,5 @@
 import React from 'react';
-import legend from '../../images/Probability.PNG';
+// import legend from '../../images/Probability.PNG';
 import './Legend.css';
 
 const ColorBox = (props) => (

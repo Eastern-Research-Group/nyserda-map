@@ -28,7 +28,7 @@ export default function reducer (state = initialState, action) {
             };
 
         case fromLayers.SELECT_LAYER:
-            let years = action.payload.categories.filter(c => c.indexOf('ExistingMarsh') !== -1).map(c => parseInt(c.replace('ExistingMarsh','')))
+            let years = action.payload.categories.filter(c => c.indexOf('ExistingMarsh') !== -1).map(c => parseInt(c.replace('ExistingMarsh',''),10))
             return {
                 ...state,
                 categories: action.payload.categories,

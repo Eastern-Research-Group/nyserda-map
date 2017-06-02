@@ -1,14 +1,19 @@
 .nyserda-control {
     position: absolute;
     left: 12px;
-    top: 7rem;
+    /*top: 7rem;*/
+    top: 9rem;
     padding: 1rem;
-    width: 12rem;
+    /*width: 12rem;*/
+    width: 15.3rem;
     /*height: 20vh;*/
     z-index: 400;
     background-color: white;
-    border: 1px solid black;
-    box-shadow: 5px 5px 2.5px #888888;
+    /*border: 1px solid black;*/
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    /*box-shadow: 5px 5px 2.5px #888888;*/
+    /*box-shadow: 2.5px 2.5px 1.25px #888888;*/
+    border-radius: 4px;
 }
 
 .nyserda-control .nyserda-data-selector {
