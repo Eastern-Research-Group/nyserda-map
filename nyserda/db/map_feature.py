@@ -8,12 +8,13 @@ class MapFeature(Base):
     id = Column(Integer, primary_key=True)
     children = relationship('ImageOverlay')
     path = Column(String)
-    image = Column(String)
+    image = Column(String, unique=True)
     coords = Column(String)
+    lod = Column(String)
     key = Column(String)
     subfolder = Column(String)
 
     # Input: Before(w,e,n,s), After(s,w,n,e)
     # Output: [s,w],[n,e]
     def __repr__(self):
-        return "<MapFeature(path='%s', image='%s', coords='%s', key='%s' subfolder='%s')>)" % (self.path, self.image, self.coords, self.key, self.subfolder)
+        return "<MapFeature(path='%s', image='%s', coords='%s', lod='%s', key='%s', subfolder='%s')>)" % (self.path, self.image, self.coords, self.lod, self.key, self.subfolder)

@@ -36,7 +36,7 @@ class JsonOutput:
                     # Write coordinates into json with new path name (s,w,n,e)
                     # TODO: Create new feature bundle for each layer
                     coords = instance.coords.split(',')
-                    print(os.path.join('/',instance.key,instance.subfolder,filename))
+                    # print(os.path.join('/',instance.key,instance.subfolder,filename))
                     self.features.append({
                         'type': 'Feature',
                         'properties': {
@@ -47,6 +47,7 @@ class JsonOutput:
                         },
                         'geometery': {
                             'type': 'Point',
+                            'lod': instance.lod,
                             'coordinates': [[coords[0], coords[1]], [coords[2], coords[3]]],
                         }
                     })
