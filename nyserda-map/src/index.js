@@ -1,4 +1,4 @@
-// import 'es6-symbol/implement';
+import 'es6-symbol/implement';
 import "iterators-polyfill";
 import React from 'react';
 import ReactDOM from 'react-dom';
