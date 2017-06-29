@@ -7,7 +7,7 @@ const composeEnhancers = (typeof window !== 'undefined' && process.env.NODE_ENV 
 let devMidleware = [];
 if (process.env.NODE_ENV !== 'production') {
     devMidleware = [
-        logger,
+        // logger,
     ];
 }
 

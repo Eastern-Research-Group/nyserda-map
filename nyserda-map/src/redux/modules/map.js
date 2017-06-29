@@ -1,6 +1,7 @@
 import * as fromControl from './control';
 import * as fromLayers from './layers';
 export const CHANGE_VIEW = 'nyserda/map/CHANGE_VIEW';
+export const CHANGE_ZOOM = 'nyserda/map/CHANGE_ZOOM';
 
 const defaultViews = {
     default: {lat: 40.7993, lng: -73.6853, zoom: 10},
@@ -37,19 +38,32 @@ export default function reducer (state = initialState, action) {
         case fromLayers.SELECT_LAYER:
             return state;
 
+        case CHANGE_ZOOM:
+            return {
+                ...state,
+                zoom: action.payload.zoom,
+            };
+
         default:
             return state;
     }
 }
 
 export const getCoordinates = (state) => [state.map.lat, state.map.lng];
-export const getZoom = state => state.map.zoom
+export const getZoom = state => state.map.zoom;
 
 export const changeView = (lat, lng, zoom) => ({
     type: CHANGE_VIEW,
     payload: {
         lat,
         lng,
+        zoom,
+    }
+});
+
+export const changeZoom = (zoom) => ({
+    type: CHANGE_ZOOM,
+    payload: {
         zoom,
     }
 });

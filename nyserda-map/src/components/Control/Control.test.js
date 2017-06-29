@@ -5,8 +5,13 @@ import Control from './Control';
 
 function setup () {
     const props = {
-        example: 'FooBarBaz',
-        onChangeExample: jest.fn(),
+        area: 'nyc',
+        years: [2017],
+        selectedYear: '',
+        selectedLayerTypes: [],
+        onSelectArea: jest.fn(),
+        onChangeSlider: jest.fn(),
+        onSelectLayerType: jest.fn(),
     };
 
     const enzymeWrapper = shallow(<Control {...props}/>);
@@ -20,8 +25,6 @@ function setup () {
 describe('<Control />', () => {
     it('renders without crashing', () => {
         const {props} = setup();
-        const component = renderer.create(<Control {...props}/>);
-        let tree = component.toJSON();
-        expect(tree).toMatchSnapshot();
+        const component = shallow(<Control {...props}/>);
     });
 });

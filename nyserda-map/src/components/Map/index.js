@@ -8,6 +8,9 @@ import {
     getSelectedLayerTypes,
     getSelectedYear,
 } from '../../redux/modules/reducer';
+import {
+    changeZoom,
+} from '../../redux/modules/map';
 
 const mapStateToProps = state => ({
     coordinates: getCoordinates(state),
@@ -18,7 +21,11 @@ const mapStateToProps = state => ({
     selectedYear: getSelectedYear(state),
 });
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+    onZoom(e) {
+        dispatch(changeZoom((e.target.getZoom())));
+    }
+});
 
 export default connect(
     mapStateToProps,

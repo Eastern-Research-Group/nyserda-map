@@ -71,26 +71,6 @@ export default props => {
                     </fieldset>
                 </div>
             ) : null}
-
-
-            {/*<div className="nyserda-layer-selector" id="nyserda-layers-container">*/}
-            {/*{props.categories.map((category, key) => (*/}
-            {/*<label*/}
-            {/*key={key}*/}
-            {/*htmlFor={`category-${key}`}*/}
-            {/*className='nyserda-layer-checkbox'>*/}
-            {/*<input*/}
-            {/*type="checkbox"*/}
-            {/*id={`category-${key}`}*/}
-            {/*value={category}*/}
-            {/*checked={props.selectedCategories.indexOf(category) !== - 1}*/}
-            {/*onChange={props.onSelectCategory}/>*/}
-
-            {/*{category}*/}
-
-            {/*</label>*/}
-            {/*))}*/}
-            {/*</div>*/}
         </div>
     );
 }
