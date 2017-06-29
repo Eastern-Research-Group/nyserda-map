@@ -90,6 +90,7 @@ class Kml:
         folders = self.find(root, 'Folder')
         region = self.find(folders, 'Region')
         lod = self.find(region,'Lod')
+        # lod = self.find(root,'Lod')
         minLodPixels = self.find(region,'minLodPixels').text
         maxLodPixels = self.find(region,'maxLodPixels').text
         
@@ -125,12 +126,13 @@ class Kml:
             folder = self.find(root,'Folder')
             lod = self.get_lod(root)
             ground_overlays = self.findall(folder,'GroundOverlay')
-            for overlays in ground_overlays:
-                icon_href = self.get_href(overlays)
+            for overlay in ground_overlays:
+                icon_href = self.get_href(overlay)
                 file_only = icon_href.split('/')[-1]
                 filename, ext = os.path.splitext(file_only)
                 icon_path = os.path.abspath(icon_href)
-                coordinates = self.get_coords(overlays)
+                coordinates = self.get_coords(overlay)
+                # lod = self.get_lod(overlay)
                 foo_list.append({
                     'path': path,
                     'link': icon_path,

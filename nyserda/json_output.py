@@ -37,6 +37,9 @@ class JsonOutput:
                     # TODO: Create new feature bundle for each layer
                     coords = instance.coords.split(',')
                     # print(os.path.join('/',instance.key,instance.subfolder,filename))
+                    lod = ''
+                    if instance.lod:
+                        lod = instance.lod
                     self.features.append({
                         'type': 'Feature',
                         'properties': {
