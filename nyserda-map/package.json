@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "es6-symbol": "^3.1.1",
+    "iterators-polyfill": "^1.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
